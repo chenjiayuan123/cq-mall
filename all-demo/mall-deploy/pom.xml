@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>all-demo</artifactId>
+    <groupId>club.banyuan</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>mall-mgt</artifactId>
+  <dependencies>
+    <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-swagger2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-swagger-ui</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-commons</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>cn.hutool</groupId>
+      <artifactId>hutool-all</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.aliyun.oss</groupId>
+      <artifactId>aliyun-sdk-oss</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>net.logstash.logback</groupId>
+      <artifactId>logstash-logback-encoder</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.minio</groupId>
+      <artifactId>minio</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-jar-plugin</artifactId>
+      <version>3.1.0</version>
+    </dependency>
+  </dependencies>
+  <profiles>
+    <!--开发环境-->
+    <profile>
+      <id>dev</id>
+      <properties>
+        <spring.profiles.active>dev</spring.profiles.active>
+      </properties>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+    </profile>
+    <!--生产环境-->
+    <profile>
+      <id>prod</id>
+      <properties>
+        <start-class>club.banyuan.mall.mgt.DemoApplication</start-class>
+        <spring.profiles.active>prod</spring.profiles.active>
+      </properties>
+    </profile>
+  </profiles>
+  <build>
+    <!-- profile对资源的操作 -->
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>application*.yml</exclude>
+          <exclude>*.properties</exclude>
+          <!--          过滤文件夹-->
+          <exclude>**/</exclude>
+        </excludes>
+      </resource>
+
+      <resource>
+        <directory>src/main/resources/${spring.profiles.active}</directory>
+        <includes>
+          <include>*.properties</include>
+        </includes>
+        <targetPath>${basedir}/target/classes</targetPath>
+      </resource>
+
+      <resource>
+        <directory>src/main/resources</directory>
+        <!-- 是否替换@xx@表示的maven properties属性值 -->
+        <filtering>true</filtering>
+        <includes>
+          <include>application.yml</include>
+          <include>application-${spring.profiles.active}.yml</include>
+        </includes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <excludes>
+            <exclude>application*.yml</exclude>
+            <exclude>*.properties</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+      <!--      <plugin>-->
+      <!--        <groupId>org.springframework.boot</groupId>-->
+      <!--        <artifactId>spring-boot-maven-plugin</artifactId>-->
+      <!--      </plugin>-->
+
+      <!--      <plugin>-->
+      <!--        <groupId>org.apache.maven.plugins</groupId>-->
+      <!--        <artifactId>maven-jar-plugin</artifactId>-->
+      <!--        <version>2.3.1</version>-->
+      <!--        <configuration>-->
+      <!--          <excludes>-->
+      <!--            <exclude>**/dev/*</exclude>-->
+      <!--            <exclude>**/prod/*</exclude>-->
+      <!--            <exclude>*.yml</exclude>-->
+      <!--          </excludes>-->
+      <!--        </configuration>-->
+      <!--      </plugin>-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2-beta-5</version>
+        <configuration>
+          <!--   这个是assembly 所在位置  -->
+          <descriptor>assembly/assembly.xml</descriptor>
+        </configuration>
+
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- profiles部分不变 -->
+      <!--      <plugin>-->
+      <!--        <groupId>org.apache.maven.plugins</groupId>-->
+      <!--        <artifactId>maven-resources-plugin</artifactId>-->
+      <!--        <version>2.7</version>-->
+      <!--        <executions>-->
+      <!--          <execution>-->
+      <!--            <id>default-resources</id>-->
+      <!--            <phase>validate</phase>-->
+
+      <!--            <configuration>-->
+      <!--              <outputDirectory>target/classes</outputDirectory>-->
+      <!--              <useDefaultDelimiters>false</useDefaultDelimiters>-->
+      <!--              <delimiters>-->
+      <!--                <delimiter>@</delimiter>-->
+      <!--              </delimiters>-->
+      <!--&lt;!&ndash;              <resource>&ndash;&gt;-->
+      <!--&lt;!&ndash;                <directory>src/main/resources/</directory>&ndash;&gt;-->
+      <!--&lt;!&ndash;                <filtering>true</filtering>&ndash;&gt;-->
+      <!--&lt;!&ndash;                &lt;!&ndash;①&ndash;&gt;&ndash;&gt;-->
+      <!--&lt;!&ndash;                <excludes>&ndash;&gt;-->
+      <!--&lt;!&ndash;                  <exclude>*.yml</exclude>&ndash;&gt;-->
+      <!--&lt;!&ndash;                  <exclude>**/dev/*</exclude>&ndash;&gt;-->
+      <!--&lt;!&ndash;                  <exclude>**/prod/*</exclude>&ndash;&gt;-->
+      <!--&lt;!&ndash;                </excludes>&ndash;&gt;-->
+      <!--&lt;!&ndash;              </resource>&ndash;&gt;-->
+      <!--              &lt;!&ndash;              <resource>&ndash;&gt;-->
+      <!--              &lt;!&ndash;                <directory>src/main/resources</directory>&ndash;&gt;-->
+      <!--              &lt;!&ndash;                &lt;!&ndash;②&ndash;&gt;&ndash;&gt;-->
+      <!--              &lt;!&ndash;                <filtering>true</filtering>&ndash;&gt;-->
+      <!--              &lt;!&ndash;                <includes>&ndash;&gt;-->
+      <!--              &lt;!&ndash;                  <include>application.yml</include>&ndash;&gt;-->
+      <!--              &lt;!&ndash;                  <include>application-${spring.profiles.active}.yml</include>&ndash;&gt;-->
+      <!--              &lt;!&ndash;                </includes>&ndash;&gt;-->
+      <!--              &lt;!&ndash;              </resource>&ndash;&gt;-->
+      <!--              &lt;!&ndash;              <resources>&ndash;&gt;-->
+      <!--              &lt;!&ndash;                <resource>&ndash;&gt;-->
+      <!--              &lt;!&ndash;                  <directory>src/main/resources/</directory>&ndash;&gt;-->
+      <!--              &lt;!&ndash;                  <include>application-${spring.profiles.active}.yaml</include>&ndash;&gt;-->
+      <!--              &lt;!&ndash;                  <excludes>&ndash;&gt;-->
+      <!--              &lt;!&ndash;                    <exclude>*.yaml</exclude>&ndash;&gt;-->
+      <!--              &lt;!&ndash;                  </excludes>&ndash;&gt;-->
+      <!--              &lt;!&ndash;                  <filtering>true</filtering>&ndash;&gt;-->
+      <!--              &lt;!&ndash;                </resource>&ndash;&gt;-->
+      <!--              &lt;!&ndash;                <resource>&ndash;&gt;-->
+      <!--              &lt;!&ndash;                  <directory>src/main/resources/${spring.profiles.active}</directory>&ndash;&gt;-->
+      <!--              &lt;!&ndash;                  <filtering>false</filtering>&ndash;&gt;-->
+      <!--              &lt;!&ndash;                </resource>&ndash;&gt;-->
+      <!--              &lt;!&ndash;              </resources>&ndash;&gt;-->
+      <!--            </configuration>-->
+      <!--          </execution>-->
+      <!--        </executions>-->
+      <!--      </plugin>-->
+
+      <!--      <plugin>-->
+      <!--        <groupId>org.apache.maven.plugins</groupId>-->
+      <!--        <artifactId>maven-dependency-plugin</artifactId>-->
+      <!--        <executions>-->
+      <!--          <execution>-->
+      <!--            <id>copy</id>-->
+      <!--            <phase>package</phase>-->
+      <!--            <goals>-->
+      <!--              <goal>copy-dependencies</goal>-->
+      <!--            </goals>-->
+      <!--            <configuration>-->
+      <!--              <type>jar</type>-->
+      <!--              <includeTypes>jar</includeTypes>-->
+      <!--              <includeScope>runtime</includeScope>-->
+      <!--              <outputDirectory>${project.build.directory}/lib</outputDirectory>-->
+      <!--            </configuration>-->
+      <!--          </execution>-->
+      <!--        </executions>-->
+      <!--      </plugin>-->
+      <!--      <plugin>-->
+      <!--        <groupId>org.springframework.boot</groupId>-->
+      <!--        <artifactId>spring-boot-maven-plugin</artifactId>-->
+      <!--        <configuration>-->
+      <!--          <layout>ZIP</layout>-->
+      <!--        </configuration>-->
+      <!--      </plugin>-->
+    </plugins>
+  </build>
+
+
+</project>
