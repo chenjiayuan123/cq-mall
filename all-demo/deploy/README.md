@@ -1,5 +1,5 @@
 ## 说明
-将程序根据环境进行打包，压缩称为tar.gz文件
+将程序根据环境进行打包，压缩成为tar.gz文件
 
 build阶段替换application.yml文件中@@包裹的内容，
 并且根据resource配置复制指定的resource下的文件到target/classes路径

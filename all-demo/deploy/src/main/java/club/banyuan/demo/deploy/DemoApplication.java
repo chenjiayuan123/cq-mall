@@ -1,4 +1,4 @@
-package club.banyuan.mall.mgt;
+package club.banyuan.demo.deploy;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import org.springframework.boot.SpringApplication;

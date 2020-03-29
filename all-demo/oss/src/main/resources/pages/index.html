@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<form id="form">
+  <input name="file" type="file">
+  <input class="submit" type="button" value="提交">
+  <div id="res"></div>
+</form>
+<button id="delete">删除</button>
+<script src="jquery-3.4.1.js"></script>
+<script>
+
+  $('.submit').on('click', function () {
+    var formData = new FormData($("#form")[0]);//获取form值
+    $.ajax({
+      url: "file/image/upload",
+      type: "POST",
+      data: formData,
+      processData: false,  // 不处理数据
+      contentType: false,   // 不设置内容类型
+      success: function (data) {
+        $("#res").append("<img style='width: 100px' src='" + data + "'>");
+      }
+    });
+  });
+
+  $("#delete").click(function () {
+    var $img = $("#res img").first();
+    var obj = {"objectName": $img.attr("src").replace("http://minio.banyuan.club/dev/", "")};
+    $.ajax({
+      type: "POST",
+      contentType: "application/json",
+      url: "file/image/delete?" + $.param(obj),
+      success: function (data) {
+        $img.remove();
+      }
+    });
+  });
+</script>
+</body>
+
+</html>

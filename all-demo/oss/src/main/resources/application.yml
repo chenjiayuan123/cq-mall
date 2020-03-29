@@ -1,0 +1,14 @@
+spring:
+  resources:
+    static-locations: classpath:pages/,file:pages/
+  servlet:
+    multipart:
+      enabled: true #开启文件上传
+      max-file-size: 10MB #限制文件上传大小为10M
+minio:
+  endpoint: http://minio.banyuan.club #MinIO服务所在地址
+  bucketName: dev #存储桶名称
+  accessKey: banyuan #访问的key
+  secretKey: minio@banyuan #访问的秘钥
+server:
+  port: 8088
