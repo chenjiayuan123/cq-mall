@@ -13,6 +13,7 @@
   <modules>
     <module>deploy</module>
     <module>oss</module>
+    <module>redis</module>
   </modules>
   <dependencies>
     <dependency>

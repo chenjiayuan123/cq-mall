@@ -1,6 +1,5 @@
 package club.banyuan.demo.oss;
 
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -11,7 +10,8 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 @SpringBootApplication(exclude = {
     // 禁用数据源，因为使用了druid数据源，因此需要同样禁用druid数据源的自动配置
     DataSourceAutoConfiguration.class,
-    DruidDataSourceAutoConfigure.class},scanBasePackages = "club.banyuan.demo")
+    // DruidDataSourceAutoConfigure.class
+},scanBasePackages = "club.banyuan.demo")
 
 public class DemoApplication {
 
