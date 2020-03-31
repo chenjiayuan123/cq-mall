@@ -16,8 +16,8 @@ public class RedisCacheServiceImpl implements CacheService {
   private RedisTemplate<String, Object> redisTemplate;
 
   @Override
-  public void set(String key, Object value, long time) {
-    redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
+  public void set(String key, Object value, long sec) {
+    redisTemplate.opsForValue().set(key, value, sec, TimeUnit.SECONDS);
   }
 
   @Override
@@ -42,8 +42,8 @@ public class RedisCacheServiceImpl implements CacheService {
   }
 
   @Override
-  public Boolean expire(String key, long time) {
-    return redisTemplate.expire(key, time, TimeUnit.SECONDS);
+  public Boolean expire(String key, long sec) {
+    return redisTemplate.expire(key, sec, TimeUnit.SECONDS);
   }
 
   @Override
@@ -73,9 +73,9 @@ public class RedisCacheServiceImpl implements CacheService {
   }
 
   @Override
-  public Boolean hSet(String key, String hashKey, Object value, long time) {
+  public Boolean hSet(String key, String hashKey, Object value, long sec) {
     redisTemplate.opsForHash().put(key, hashKey, value);
-    return expire(key, time);
+    return expire(key, sec);
   }
 
   @Override
@@ -89,9 +89,9 @@ public class RedisCacheServiceImpl implements CacheService {
   }
 
   @Override
-  public Boolean hSetAll(String key, Map<String, Object> map, long time) {
+  public Boolean hSetAll(String key, Map<String, Object> map, long sec) {
     redisTemplate.opsForHash().putAll(key, map);
-    return expire(key, time);
+    return expire(key, sec);
   }
 
   @Override
@@ -131,9 +131,9 @@ public class RedisCacheServiceImpl implements CacheService {
   }
 
   @Override
-  public Long sAdd(String key, long time, Object... values) {
+  public Long sAdd(String key, long sec, Object... values) {
     Long count = redisTemplate.opsForSet().add(key, values);
-    expire(key, time);
+    expire(key, sec);
     return count;
   }
 
@@ -173,9 +173,9 @@ public class RedisCacheServiceImpl implements CacheService {
   }
 
   @Override
-  public Long lPush(String key, Object value, long time) {
+  public Long lPush(String key, Object value, long sec) {
     Long index = redisTemplate.opsForList().rightPush(key, value);
-    expire(key, time);
+    expire(key, sec);
     return index;
   }
 
@@ -185,9 +185,9 @@ public class RedisCacheServiceImpl implements CacheService {
   }
 
   @Override
-  public Long lPushAll(String key, Long time, Object... values) {
+  public Long lPushAll(String key, Long sec, Object... values) {
     Long count = redisTemplate.opsForList().rightPushAll(key, values);
-    expire(key, time);
+    expire(key, sec);
     return count;
   }
 

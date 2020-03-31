@@ -34,7 +34,7 @@ public interface CacheService {
   /**
    * 设置过期时间
    */
-  Boolean expire(String key, long time);
+  Boolean expire(String key, long sec);
 
   /**
    * 获取过期时间
@@ -61,7 +61,7 @@ public interface CacheService {
   /**
    * 向Hash结构中放入一个属性
    */
-  Boolean hSet(String key, String hashKey, Object value, long time);
+  Boolean hSet(String key, String hashKey, Object value, long sec);
 
   /**
    * 向Hash结构中放入一个属性
@@ -76,7 +76,7 @@ public interface CacheService {
   /**
    * 直接设置整个Hash结构
    */
-  Boolean hSetAll(String key, Map<String, Object> map, long time);
+  Boolean hSetAll(String key, Map<String, Object> map, long sec);
 
   /**
    * 直接设置整个Hash结构
@@ -113,7 +113,7 @@ public interface CacheService {
   /**
    * 向Set结构中添加属性
    */
-  Long sAdd(String key, long time, Object... values);
+  Long sAdd(String key, long sec, Object... values);
 
   /**
    * 是否为Set中的属性
@@ -153,7 +153,7 @@ public interface CacheService {
   /**
    * 向List结构中添加属性
    */
-  Long lPush(String key, Object value, long time);
+  Long lPush(String key, Object value, long sec);
 
   /**
    * 向List结构中批量添加属性
@@ -163,7 +163,7 @@ public interface CacheService {
   /**
    * 向List结构中批量添加属性
    */
-  Long lPushAll(String key, Long time, Object... values);
+  Long lPushAll(String key, Long sec, Object... values);
 
   /**
    * 从List结构中移除属性

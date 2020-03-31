@@ -1,7 +1,5 @@
 package club.banyuan.demo.redis.demo;
 
-import club.banyuan.demo.redis.service.CacheService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
