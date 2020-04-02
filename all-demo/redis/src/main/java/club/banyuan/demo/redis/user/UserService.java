@@ -1,4 +1,4 @@
-package club.banyuan.demo.redis.demo;
+package club.banyuan.demo.redis.user;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -27,12 +27,7 @@ public class UserService {
   // 当为true时表示进行缓存处理；当为false时表示不进行缓存处理，即每次调用该方法时该方法都会执行一次。
   @Cacheable(value = {"zhangsan", "lisi"}, key = "methodName")
   public User getUser() {
-    if (count == 0) {
-      count++;
-      return new User("张三", "123456");
-    } else {
-      return new User("李四", "123456");
-    }
+    return new User("user", (count++) + "");
   }
 
   // @CachePut也可以声明一个方法支持缓存功能。与@Cacheable不同的是

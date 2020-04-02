@@ -1,7 +1,7 @@
 package club.banyuan.demo.redis.service.impl;
 
-import club.banyuan.demo.redis.demo.User;
-import club.banyuan.demo.redis.demo.UserService;
+import club.banyuan.demo.redis.user.User;
+import club.banyuan.demo.redis.user.UserService;
 import club.banyuan.demo.redis.service.CacheService;
 import org.junit.Assert;
 import org.junit.Before;

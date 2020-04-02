@@ -1,4 +1,4 @@
-package club.banyuan.demo.redis.demo;
+package club.banyuan.demo.redis.user;
 
 import java.util.Objects;
 
