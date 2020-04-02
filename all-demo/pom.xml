@@ -14,6 +14,7 @@
     <module>deploy</module>
     <module>oss</module>
     <module>redis</module>
+    <module>token</module>
   </modules>
   <dependencies>
     <dependency>
