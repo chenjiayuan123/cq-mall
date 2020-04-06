@@ -26,6 +26,7 @@ public class JwtTokenServiceImplTest {
     ReflectionTestUtils.setField(tokenService, "expireSec", 3000L);
     String subject = "zhangsan";
     String token = tokenService.generateToken(subject);
+    System.out.println(token);
     assertTrue(3000L - tokenService.getExpireSec(token) < 3);
     assertEquals(subject, tokenService.parseSubject(token));
     assertFalse(tokenService.isExpired(token));
@@ -69,6 +70,23 @@ public class JwtTokenServiceImplTest {
     Object userObj = resultMap.get("user");
     assertNotNull(userObj);
     assertFalse(userObj instanceof User);
+  }
+
+  /**
+   * 对于jwt.io 中提供的调试工具，选中secret base64 encoded，并且需要填入使用如下转换的秘钥
+   */
+  @Test
+  public void parse(){
+    // 需要将秘钥进行如下转换之后填写到jwt.io 中
+    System.out.println(
+    javax.xml.bind.DatatypeConverter.printBase64Binary(
+    javax.xml.bind.DatatypeConverter.parseBase64Binary("banyuan")));
+
+    System.out.println(tokenService.generateToken("admin"));
+
+
+    String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MTIzIiwiaWF0IjoxNTg2MTc5OTE5LCJleHAiOjE1ODYxODM1MTl9.bgdX-KRBrqwPvXW4WSL_L4DcJN_Z3fucIWZ8_7hcADz1jsELb13XWnuz6qces7NNzFJ9m71ZndOWkMt6IXx-UQ";
+    System.out.println(tokenService.parseSubject(token));
   }
 
 }
