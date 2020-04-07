@@ -1,0 +1,5 @@
+token:
+  secret: banyuan # 加解密使用的密钥
+  expireSec: 3600 # 过期时长
+server:
+  port: 8088

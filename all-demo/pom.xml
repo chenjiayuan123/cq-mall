@@ -15,6 +15,7 @@
     <module>oss</module>
     <module>redis</module>
     <module>token</module>
+    <module>security-jwt</module>
   </modules>
   <dependencies>
     <dependency>
