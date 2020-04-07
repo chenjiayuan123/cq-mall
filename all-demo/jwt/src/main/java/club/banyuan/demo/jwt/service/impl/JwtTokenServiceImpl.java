@@ -1,6 +1,6 @@
-package club.banyuan.demo.token.service.impl;
+package club.banyuan.demo.jwt.service.impl;
 
-import club.banyuan.demo.token.service.TokenService;
+import club.banyuan.demo.jwt.service.TokenService;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import io.jsonwebtoken.Claims;
@@ -13,8 +13,6 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -44,37 +42,44 @@ import org.springframework.stereotype.Service;
 @Service
 public class JwtTokenServiceImpl implements TokenService {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenServiceImpl.class);
-
-  @Value("${token.secret}")
-  private String secret;
   @Value("${token.expireSec}")
-  private Long expireSec;
+  private long expireSec;
+
+  @Value("${token.secretKey}")
+  private String secretKey;
 
   @Override
   public String generateToken(String subject) {
     if (StrUtil.isBlank(subject)) {
       throw new IllegalArgumentException("subject is blank");
     }
+
     return Jwts.builder()
-        .setSubject(subject) // 用户名
-        .setIssuedAt(new Date()) // token生成的时间
-        .setExpiration(new Date(System.currentTimeMillis() + expireSec * 1000)) // token过期的时间
-        .signWith(SignatureAlgorithm.HS512, secret) // 指定加密方式和秘钥
+        .setSubject(subject)
+        .setIssuedAt(new Date())
+        .setExpiration(new Date(System.currentTimeMillis() + expireSec * 1000))
+        .signWith(SignatureAlgorithm.HS512, secretKey)
         .compact();
   }
 
   @Override
-  public String generateToken(Map<String, Object> subjects) {
+  public String generateToken(Map<String, ?> subjects) {
     if (CollectionUtil.isEmpty(subjects)) {
       throw new IllegalArgumentException("subjects is empty");
     }
+
     return Jwts.builder()
-        .setClaims(subjects) // 可以指定多个自定义的键值对
-        .setIssuedAt(new Date()) // token生成的时间
-        .setExpiration(new Date(System.currentTimeMillis() + expireSec * 1000)) // token过期的时间
-        .signWith(SignatureAlgorithm.HS512, secret) // 指定加密方式和秘钥
+        .setClaims(new HashMap<>(subjects))
+        .setIssuedAt(new Date())
+        .setExpiration(new Date(System.currentTimeMillis() + expireSec * 1000))
+        .signWith(SignatureAlgorithm.HS512, secretKey)
         .compact();
+  }
+
+  @Override
+  public String parseSubject(String token) {
+    Claims claims = getBody(token);
+    return claims.getSubject();
   }
 
   /**
@@ -85,28 +90,20 @@ public class JwtTokenServiceImpl implements TokenService {
    */
   @Override
   public Map<String, Object> parseMap(String token) {
-    Claims claims = getTokenBody(token);
+    Claims claims = getBody(token);
     return new HashMap<>(claims);
   }
 
   @Override
-  public String parseSubject(String token) {
-    return getTokenBody(token).getSubject();
-  }
-
-  @Override
   public String refreshExpireDate(String token) {
-    if (StrUtil.isEmpty(token)) {
-      throw new IllegalArgumentException("token illegal");
+    if (StrUtil.isBlank(token)) {
+      throw new IllegalArgumentException("token is blank");
     }
-
     if (isExpired(token)) {
-      throw new IllegalArgumentException("token expired");
+      throw new IllegalArgumentException("token is expire");
     }
-
-    Map<String, Object> body = parseMap(token);
     // 这里取出的map中包含token的创建时间和过期时间，不过不影响，在生成新token的时候时间会被覆盖掉
-    return generateToken(body);
+    return generateToken(parseMap(token));
   }
 
   @Override
@@ -116,21 +113,21 @@ public class JwtTokenServiceImpl implements TokenService {
 
   @Override
   public long getExpireSec(String token) {
-    return (getTokenBody(token).getExpiration().getTime() - System.currentTimeMillis()) / 1000;
+    return (getBody(token).getExpiration().getTime() - System.currentTimeMillis()) / 1000;
   }
 
-  private Claims getTokenBody(String token) {
+  private Claims getBody(String token) {
+    Claims claims;
     try {
-      return Jwts.parser()
-          .setSigningKey(secret)
-          .parseClaimsJws(token)
-          .getBody();
+      claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     } catch (ExpiredJwtException e) {
       // 如果token过期会抛出ExpiredJwtException，其中可以获取到claim
-      LOGGER.warn("token过期,token={}", token);
       return e.getClaims();
     } catch (UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
       throw new IllegalArgumentException("无效的token", e);
     }
+    return claims;
   }
+
+
 }

@@ -1,0 +1,29 @@
+POST http://mall.banyuan.club/api/admin/login
+Content-Type: application/json
+
+{"username":"admin","password":"banyuan"}
+
+> {% client.global.set("auth_token", response.body.data.token); %}
+###
+
+GET http://mall.banyuan.club/api/admin/info
+Authorization: Bearer{{auth_token}}
+
+
+###
+
+GET http://mall.banyuan.club/api/admin/list?pageNum=1&pageSize=10
+Authorization: Bearer{{auth_token}}
+
+
+###
+
+
+
+GET http://mall.banyuan.club/api/admin/login
+
+###
+
+
+
+

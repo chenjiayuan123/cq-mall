@@ -1,0 +1,5 @@
+token:
+  secretKey: banyuan
+  expireSec: 3600
+server:
+  port: 8088

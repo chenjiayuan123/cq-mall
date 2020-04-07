@@ -36,6 +36,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // for (String url : ignoreUrlsConfig().getUrls()) {
     //     registry.antMatchers(url).permitAll();
     // }
+    // 放行登录接口
+    registry.antMatchers("/admin/login").permitAll();
+
     //允许跨域请求的OPTIONS请求
     registry.antMatchers(HttpMethod.OPTIONS)
         .permitAll();
@@ -50,15 +53,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .disable()
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        // 自定义权限拒绝处理类
-        // .and()
-        // .exceptionHandling()
-        // .accessDeniedHandler(restfulAccessDeniedHandler())
-        // .authenticationEntryPoint(restAuthenticationEntryPoint())
-        // 自定义权限拦截器JWT过滤器
-        // .and()
-        // .addFilterBefore(jwtAuthenticationTokenFilter(),
-        //     UsernamePasswordAuthenticationFilter.class);
+    // 自定义权限拒绝处理类
+    // .and()
+    // .exceptionHandling()
+    // .accessDeniedHandler(restfulAccessDeniedHandler())
+    // .authenticationEntryPoint(restAuthenticationEntryPoint())
+    // 自定义权限拦截器JWT过滤器
+    // .and()
+    // .addFilterBefore(jwtAuthenticationTokenFilter(),
+    //     UsernamePasswordAuthenticationFilter.class);
   }
 
   @Override
