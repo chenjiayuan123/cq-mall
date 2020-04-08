@@ -1,15 +1,20 @@
 package club.banyuan.demo.authentication.config;
 
-import club.banyuan.demo.jwtint.security.JwtAuthenticationFilter;
-import club.banyuan.demo.jwtint.security.RestAuthenticationEntryPoint;
+import club.banyuan.demo.authentication.security.JwtAuthenticationFilter;
+import club.banyuan.demo.authentication.security.RestAuthenticationEntryPoint;
+import club.banyuan.demo.authentication.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -21,6 +26,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
    */
   @Autowired
   private AutowireCapableBeanFactory beanFactory;
+
+  @Autowired
+  private AdminService adminService;
 
   @Override
   public void configure(WebSecurity web) throws Exception {
@@ -53,5 +61,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     beanFactory.autowireBean(jwtAuthenticationFilter);
     // 如果使用addFilter 则会抛异常，没有指定order
     http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+  }
+
+  @Bean
+  public UserDetailsService userDetailsService() {
+    return username -> adminService.loadUserByUsername(username);
+  }
+
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
   }
 }

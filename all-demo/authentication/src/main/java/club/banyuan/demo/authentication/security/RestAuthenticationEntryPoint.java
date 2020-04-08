@@ -1,6 +1,6 @@
 package club.banyuan.demo.authentication.security;
 
-import club.banyuan.demo.jwtint.common.CommonResult;
+import club.banyuan.demo.authentication.common.CommonResult;
 import cn.hutool.json.JSONUtil;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -20,6 +20,6 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
       throws IOException, ServletException {
     httpServletResponse.setCharacterEncoding("utf-8");
     httpServletResponse.setContentType("application/json");
-    httpServletResponse.getWriter().println(JSONUtil.parse(new CommonResult("用户未登陆或登陆过期")));
+    httpServletResponse.getWriter().println(JSONUtil.parse(CommonResult.unauthorized()));
   }
 }
