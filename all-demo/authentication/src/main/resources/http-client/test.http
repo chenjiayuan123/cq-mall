@@ -1,0 +1,19 @@
+POST http://localhost:8088/admin/login?username=admin&password=banyuan
+Content-Type: application/json
+
+###
+
+GET http://localhost:8088/admin/auth1
+Authorization: BearereyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTU4NjMxMzAxNCwiZXhwIjoxNTg2MzE2NjE0fQ.ZlxjrJiFZJOZJT7CkW1II8ATPsNgIW8wUthMYO9cwNzs2hVVYuIPH5m9Mi7UqtyQ0E_Cxl7ZJXpfRPDfUSF8gw
+
+
+###
+
+GET http://localhost:8088/admin/auth2
+Authorization: BearereyJhbGciOiJIUzUxMiJ9.eyJ1zdWIiOiJhZG1pbiIsImlhdCI6MTU4NjMxMzAxNCwiZXhwIjoxNTg2MzE2NjE0fQ.ZlxjrJiFZJOZJT7CkW1II8ATPsNgIW8wUthMYO9cwNzs2hVVYuIPH5m9Mi7UqtyQ0E_Cxl7ZJXpfRPDfUSF8gw
+
+###
+
+
+
+

@@ -1,0 +1,10 @@
+token:
+  header: Authorization
+  schema: Bearer
+  secretKey: banyuan
+  expireSec: 3600
+server:
+  port: 8088
+mybatis:
+  mapper-locations:
+    - classpath:dao/*.xml
