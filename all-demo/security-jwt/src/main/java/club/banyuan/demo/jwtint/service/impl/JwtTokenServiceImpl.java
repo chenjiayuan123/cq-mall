@@ -1,8 +1,8 @@
-package com.banyuan.demo.jwtint.service.impl;
+package club.banyuan.demo.jwtint.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
-import com.banyuan.demo.jwtint.service.TokenService;
+import club.banyuan.demo.jwtint.service.TokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

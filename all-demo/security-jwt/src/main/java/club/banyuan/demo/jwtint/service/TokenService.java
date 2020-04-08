@@ -1,4 +1,4 @@
-package com.banyuan.demo.jwtint.service;
+package club.banyuan.demo.jwtint.service;
 
 import java.util.Map;
 

@@ -1,19 +1,24 @@
 ### 获取token
-POST http://mall.banyuan.club/api/admin/login
-Content-Type: application/json
+POST http://localhost:8088/admin/login?username=&password=
+#Content-Type: application/json
 
 // admin
 // productAdmin 产品管理员
-{
-  "username": "admin",
-  "password": "banyuan"
-}
 
-> {% client.global.set("auth_token", response.body.data.token); %}
+
+### 获取token
+POST http://localhost:8088/file/login?username=&password=
+#Content-Type: application/json
+#Authorization: BearereyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ6aGFuZ3NhbiIsImlhdCI6MTU4NjMwNzA2OSwiZXhwIjoxNTg2MzEwMDY5fQ.F5vf0OigA1TwF0FjZM-0V53i0L8Lp49GfiMc8dv4MNKya83ijyo_TPzwr270CN2i26Js9DWelUxKeLUc3YGC3Q
+
+// admin
+// productAdmin 产品管理员
+
+
 
 ### 使用授权的token访问接口
 ### 获取用户菜单
-GET http://mall.banyuan.club/api/admin/info
+GET http://localhost:8088/admin/auth1
 #Authorization: Bearer {{auth_token}}
 
 ###
