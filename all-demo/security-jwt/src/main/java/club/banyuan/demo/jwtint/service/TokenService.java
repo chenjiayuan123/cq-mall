@@ -6,11 +6,11 @@ public interface TokenService {
 
   String generateToken(String subject);
 
-  String generateToken(Map<String, Object> subjects);
-
-  Map<String, Object> parseMap(String token);
+  String generateToken(Map<String, ?> subjects);
 
   String parseSubject(String token);
+
+  Map<String, Object> parseMap(String token);
 
   String refreshExpireDate(String token);
 
