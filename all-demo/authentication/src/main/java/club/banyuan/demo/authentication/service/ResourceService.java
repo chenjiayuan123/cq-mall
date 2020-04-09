@@ -1,10 +1,11 @@
 package club.banyuan.demo.authentication.service;
 
+import club.banyuan.demo.authentication.dao.entity.UmsResource;
 import java.util.List;
 
 public interface ResourceService {
 
-  List<?> listAllResource();
+  List<UmsResource> listAllResource();
 
-  List<?> listResourceByUserName(String name);
+  List<UmsResource> listResourceByUsername(String username);
 }
