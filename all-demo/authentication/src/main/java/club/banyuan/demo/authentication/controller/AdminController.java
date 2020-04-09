@@ -28,7 +28,7 @@ public class AdminController {
 
   @RequestMapping(value = "/login", method = RequestMethod.POST)
   @ResponseBody
-  public CommonResult login(@RequestBody @Valid AdminLoginParam adminLoginParam) {
+  public CommonResult login(@RequestBody @Valid  AdminLoginParam adminLoginParam) {
     String token = adminService.login(adminLoginParam.getUsername(), adminLoginParam.getPassword());
     LoginTokenRlt rlt = new LoginTokenRlt(schema, token);
     return CommonResult.success(rlt);
