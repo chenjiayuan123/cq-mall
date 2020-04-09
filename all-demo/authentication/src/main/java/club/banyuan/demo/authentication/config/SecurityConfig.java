@@ -1,6 +1,8 @@
 package club.banyuan.demo.authentication.config;
 
+import club.banyuan.demo.authentication.security.DynamicResourceFilter;
 import club.banyuan.demo.authentication.security.JwtAuthenticationFilter;
+import club.banyuan.demo.authentication.security.RestAccessDeniedHandler;
 import club.banyuan.demo.authentication.security.RestAuthenticationEntryPoint;
 import club.banyuan.demo.authentication.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -53,7 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // 自定义权限拒绝处理类
     // AuthenticationException指的是未登录状态下访问受保护资源
     // AccessDeniedException指的是登陆了但是由于权限不足(比如普通用户访问管理员界面）。
-    http.exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint());
+    http.exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint())
+        .accessDeniedHandler(new RestAccessDeniedHandler());
 
     // 添加自定义的jwt过滤器
     JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter();
@@ -61,6 +65,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     beanFactory.autowireBean(jwtAuthenticationFilter);
     // 如果使用addFilter 则会抛异常，没有指定order
     http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+    DynamicResourceFilter dynamicResourceFilter = new DynamicResourceFilter();
+    beanFactory.autowireBean(dynamicResourceFilter);
+    http.addFilterBefore(dynamicResourceFilter, FilterSecurityInterceptor.class);
   }
 
   @Bean

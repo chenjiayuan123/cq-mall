@@ -1,13 +1,15 @@
 package club.banyuan.demo.authentication.dao.entity;
 
 import java.util.Date;
+import java.util.function.Supplier;
 
 /**
  * ums_resource
  *
  * @author
  */
-public class UmsResource {
+// 实现的supplier方法用于演示
+public class UmsResource implements Supplier<String> {
 
   private Long id;
 
@@ -84,5 +86,10 @@ public class UmsResource {
 
   public void setCategoryId(Long categoryId) {
     this.categoryId = categoryId;
+  }
+
+  @Override
+  public String get() {
+    return getName();
   }
 }

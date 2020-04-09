@@ -2,6 +2,7 @@ package club.banyuan.demo.authentication.security;
 
 import club.banyuan.demo.authentication.dao.entity.UmsAdmin;
 import java.util.Collection;
+import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,13 +10,16 @@ public class AdminUserDetails implements UserDetails {
 
   private UmsAdmin admin;
 
-  public AdminUserDetails(UmsAdmin admin) {
+  private List<? extends GrantedAuthority> authorities;
+
+  public AdminUserDetails(UmsAdmin admin, List<? extends GrantedAuthority> authorities) {
     this.admin = admin;
+    this.authorities = authorities;
   }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return null;
+    return authorities;
   }
 
   @Override

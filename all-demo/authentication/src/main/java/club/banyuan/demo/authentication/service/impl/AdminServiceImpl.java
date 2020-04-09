@@ -1,10 +1,16 @@
 package club.banyuan.demo.authentication.service.impl;
 
+import club.banyuan.demo.authentication.common.ReqFailException;
 import club.banyuan.demo.authentication.dao.UmsAdminDao;
 import club.banyuan.demo.authentication.dao.entity.UmsAdmin;
+import club.banyuan.demo.authentication.dao.entity.UmsResource;
 import club.banyuan.demo.authentication.security.AdminUserDetails;
+import club.banyuan.demo.authentication.security.ResourceConfigAttribute;
 import club.banyuan.demo.authentication.service.AdminService;
+import club.banyuan.demo.authentication.service.ResourceService;
 import club.banyuan.demo.authentication.service.TokenService;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +21,9 @@ public class AdminServiceImpl implements AdminService {
 
   @Autowired
   private UmsAdminDao umsAdminDao;
+
+  @Autowired
+  private ResourceService resourceService;
 
   @Autowired
   private TokenService tokenService;
@@ -39,10 +48,14 @@ public class AdminServiceImpl implements AdminService {
   @Override
   public AdminUserDetails loadUserByUsername(String username) {
     UmsAdmin umsAdmin = umsAdminDao.selectByUsername(username);
+    List<UmsResource> userResources = resourceService.listResourceByUsername(username);
     if (umsAdmin == null) {
-      // TODO
-      throw new RuntimeException("user not found");
+      throw new ReqFailException("user not found");
     }
-    return new AdminUserDetails(umsAdmin);
+    List<ResourceConfigAttribute> configAttributes = userResources.stream()
+        .map(ResourceConfigAttribute::new)
+        .collect(
+            Collectors.toList());
+    return new AdminUserDetails(umsAdmin, configAttributes);
   }
 }
