@@ -28,3 +28,8 @@ spring:
     port: 6379 # Redis服务器连接端口
     password: # Redis服务器连接密码（默认为空）
     timeout: 300ms # 连接超时时间（毫秒）
+minio:
+  endpoint: http://minio.banyuan.club #MinIO服务所在地址
+  bucketName: dev #存储桶名称
+  accessKey: banyuan #访问的key
+  secretKey: minio@banyuan #访问的秘钥

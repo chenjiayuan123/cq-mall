@@ -1,0 +1,26 @@
+POST http://localhost:8088/admin/login
+Content-Type: application/json
+
+{"username":"productAdmin","password":"banyuan"}
+//{"username":"admin","password":"banyuan"}
+
+> {% client.global.set("auth_token", response.body.data.token); %}
+###
+
+POST http://localhost:8088/file/image/upload
+Content-Type: multipart/form-data; boundary=boundary
+Authorization: Bearer {{auth_token}}
+
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="test.jpg"
+
+< ./test.jpg
+
+> {% client.global.set("file_path", response.body.substr("http://minio.banyuan.club/dev/".length,response.body.length));
+console.log(client.global.get("file_path"));
+%}
+
+###
+POST http://localhost:8088/file/image/delete?objectName={{file_path}}
+Authorization: Bearer {{auth_token}}
