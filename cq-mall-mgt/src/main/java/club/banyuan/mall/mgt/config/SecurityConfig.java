@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -36,7 +37,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   public void configure(WebSecurity web) throws Exception {
     // 这里配置的路径不走security的过滤器
-    web.ignoring().antMatchers("/admin/login");
+    web.ignoring().antMatchers("/admin/login")
+        // admin/info 会先发option请求，并且header里面没有token，因此这里放行option请求
+        .antMatchers(HttpMethod.OPTIONS, "/**");
   }
 
   /**

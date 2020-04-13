@@ -6,7 +6,9 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.SecurityMetadataSource;
 import org.springframework.security.access.intercept.AbstractSecurityInterceptor;
 import org.springframework.security.access.intercept.InterceptorStatusToken;
@@ -39,7 +41,13 @@ public class DynamicResourceFilter extends AbstractSecurityInterceptor implement
 
     FilterInvocation filterInvocation = new FilterInvocation(servletRequest, servletResponse,
         filterChain);
-
+    HttpServletRequest request = (HttpServletRequest) servletRequest;
+    //OPTIONS请求直接放行
+    if (request.getMethod().equals(HttpMethod.OPTIONS.toString())) {
+      filterInvocation.getChain()
+          .doFilter(filterInvocation.getRequest(), filterInvocation.getResponse());
+      return;
+    }
     InterceptorStatusToken token = super.beforeInvocation(filterInvocation);
 
     try {

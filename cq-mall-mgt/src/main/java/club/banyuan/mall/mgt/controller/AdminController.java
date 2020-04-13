@@ -4,6 +4,7 @@ import club.banyuan.mall.mgt.common.CommonResult;
 import club.banyuan.mall.mgt.dto.AdminLoginParam;
 import club.banyuan.mall.mgt.service.AdminService;
 import club.banyuan.mall.mgt.vo.LoginTokenRlt;
+import java.security.Principal;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,10 +36,10 @@ public class AdminController {
   }
 
 
-  @RequestMapping(value = "/auth1", method = RequestMethod.GET)
+  @RequestMapping(value = "/info", method = RequestMethod.GET)
   @ResponseBody
-  public String auth1() {
-    return "auth1";
+  public CommonResult info(Principal principal) {
+    return CommonResult.success(adminService.getUserInfo(principal.getName()));
   }
 
   @RequestMapping(value = "/auth2", method = RequestMethod.GET)

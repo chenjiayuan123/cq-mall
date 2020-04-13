@@ -1,13 +1,13 @@
 POST http://localhost:8088/admin/login
 Content-Type: application/json
 
-{"username":"productAdmin","password":"banyuan"}
-//{"username":"admin","password":"banyuan"}
+//{"username":"productAdmin","password":"banyuan"}
+{"username":"admin","password":"banyuan"}
 
 > {% client.global.set("auth_token", response.body.data.token); %}
 ###
 
-GET http://localhost:8088/admin/auth1
+GET http://localhost:8088/admin/info
 Authorization: Bearer {{auth_token}}
 
 
